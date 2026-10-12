@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>버텨봐요 공부의 숲</title>
+    <!-- PWA 지원 태그 -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2d6a4f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="공부의 숲">
+    <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
     <style>
         :root {
             --bg-color: #e8f4ec;
@@ -2207,6 +2214,17 @@
                 container.appendChild(grid);
             }
             if (tab === 'char') setTimeout(applyBlueRemovalAll, 30);
+        }
+    </script>
+
+    <!-- PWA Service Worker 등록 스크립트 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('PWA Service Worker registered:', reg.scope))
+                    .catch(err => console.log('PWA Service Worker registration failed:', err));
+            });
         }
     </script>
 </body>

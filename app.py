@@ -143,6 +143,23 @@ def serve_js():
     """정적 JS 파일 제공"""
     return send_from_directory("static/js", "app.js")
 
+@app.route("/manifest.json")
+def serve_manifest():
+    """PWA 매니페스트 파일 제공"""
+    return send_from_directory("static", "manifest.json", mimetype="application/manifest+json")
+
+@app.route("/sw.js")
+def serve_sw():
+    """PWA 서비스 워커 파일 제공"""
+    response = send_from_directory("static", "sw.js", mimetype="application/javascript")
+    response.headers["Service-Worker-Allowed"] = "/"
+    return response
+
+@app.route("/static/icons/<path:filename>")
+def serve_icons(filename):
+    """PWA 앱 아이콘 제공"""
+    return send_from_directory("static/icons", filename)
+
 @app.route("/AI-study/transparent/<path:filename>")
 def serve_transparent_ai_study(filename):
     """외곽 배경만 투명화된 고화질 캐릭터 PNG 서빙"""
@@ -163,12 +180,15 @@ def serve_ai_study(filename):
         return send_from_directory(cache_dir, f"{base}.png")
 
     ai_study_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    if not os.path.exists(ai_study_dir):
+        return ("Not Found", 404)
     file_path = os.path.join(ai_study_dir, filename)
     if not os.path.exists(file_path):
         for alt_ext in [".jpg", ".png", ".jpeg"]:
             alt_path = os.path.join(ai_study_dir, base + alt_ext)
             if os.path.exists(alt_path):
                 return send_from_directory(ai_study_dir, base + alt_ext)
+        return ("Not Found", 404)
     return send_from_directory(ai_study_dir, filename)
 
 @app.route("/avatar/composite")
