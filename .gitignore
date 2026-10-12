@@ -1,0 +1,17 @@
+# Python virtual environment
+venv/
+
+# Secret environment variables (API Keys)
+.env
+
+# Python byte-code and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
